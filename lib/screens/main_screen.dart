@@ -8,9 +8,8 @@ class LoginSignUpScreen extends StatefulWidget {
   State<LoginSignUpScreen> createState() => _LoginSignUpScreenState();
 }
 
-class
-_LoginSignUpScreenState extends State<LoginSignUpScreen> {
-// TODO : isSignupScreen 변수 선언
+class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
+  bool isSignupScreen = true;
 
     @override
     Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData (
           primarySwatch: Colors.blue,
         ),
-        home: LoginSignUpScreen()// TODO : 알맞은 위젯 채우기
+        home: LoginSignUpScreen()
     );
   }
 }

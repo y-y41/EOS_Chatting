@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../config/palette.dart';
 
@@ -11,21 +12,22 @@ class LoginSignUpScreen extends StatefulWidget {
 class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
   bool isSignupScreen = true;
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         backgroundColor: Palette.backgroundColor,
         body: Stack(
           children: [
             Positioned(
-              top: 0, left: 0, right: 0,
+              top: 0,
+              left: 0,
+              right: 0,
               child: Container(
                 height: 300,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/background.png'),
-                    fit: BoxFit.fill
-                  ),
+                      image: AssetImage('assets/background.png'),
+                      fit: BoxFit.fill),
                 ),
                 child: Container(
                   padding: EdgeInsets.only(top: 90, left: 20),
@@ -37,26 +39,26 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                         text: TextSpan(
                             text: 'Welcome ',
                             style: TextStyle(
-                                letterSpacing: 1.0, fontSize: 25, color: Colors.white
-                            ),
+                                letterSpacing: 1.0,
+                                fontSize: 25,
+                                color: Colors.white),
                             children: [
                               TextSpan(
                                   text: 'to EOS chat',
                                   style: TextStyle(
-                                      letterSpacing: 1.0, fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold
-                                  )
-                              )
-                            ]
-                        ),
+                                      letterSpacing: 1.0,
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))
+                            ]),
                       ),
                       SizedBox(
                         height: 5.0,
                       ),
                       Text(
                         'Signup to continue',
-                        style: TextStyle(
-                          letterSpacing: 1.0, color: Colors.white
-                        ),
+                        style:
+                            TextStyle(letterSpacing: 1.0, color: Colors.white),
                       )
                     ],
                   ),
@@ -71,16 +73,14 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                 width: MediaQuery.of(context).size.width - 40,
                 margin: EdgeInsets.only(left: 20, right: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 5
-                    )
-                  ]
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 15,
+                          spreadRadius: 5)
+                    ]),
                 child: Column(
                   children: [
                     Row(
@@ -92,16 +92,19 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                               Text(
                                 'LOGIN',
                                 style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold,
-                                  color: Palette.textColor1
-                                ),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: !isSignupScreen
+                                        ? Palette.activeColor
+                                        : Palette.textColor1),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 3),
-                                height: 2,
-                                width: 55,
-                                color: Colors.green,
-                              )
+                              if (!isSignupScreen)
+                                Container(
+                                  margin: EdgeInsets.only(top: 3),
+                                  height: 2,
+                                  width: 55,
+                                  color: Colors.green,
+                                )
                             ],
                           ),
                         ),
@@ -111,16 +114,19 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                               Text(
                                 'SIGNUP',
                                 style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold,
-                                  color: Palette.activeColor
-                                ),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSignupScreen
+                                        ? Palette.activeColor
+                                        : Palette.textColor1),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 3),
-                                height: 2,
-                                width: 55,
-                                color: Colors.green,
-                              )
+                              if (isSignupScreen)
+                                Container(
+                                  margin: EdgeInsets.only(top: 3),
+                                  height: 2,
+                                  width: 55,
+                                  color: Colors.green,
+                                )
                             ],
                           ),
                         )
@@ -132,15 +138,20 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                           children: [
                             TextFormField(
                               decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.account_circle, color: Palette.iconColor,),
+                                prefixIcon: Icon(
+                                  Icons.account_circle,
+                                  color: Palette.iconColor,
+                                ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Palette.textColor1),
-                                  borderRadius: BorderRadius.all(Radius.circular(35))
-                                ),
+                                    borderSide:
+                                        BorderSide(color: Palette.textColor1),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(35))),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Palette.textColor1),
-                                  borderRadius: BorderRadius.all(Radius.circular(35))
-                                ),
+                                    borderSide:
+                                        BorderSide(color: Palette.textColor1),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(35))),
                               ),
                             )
                           ],
@@ -152,7 +163,6 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
               ),
             )
           ],
-        )
-      );
-    }
+        ));
+  }
 }

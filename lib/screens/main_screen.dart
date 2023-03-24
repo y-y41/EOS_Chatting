@@ -37,7 +37,6 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                 child: Container(
                   padding: EdgeInsets.only(top: 90, left: 20),
                   child: Column(
-                    // TODO: 왼쪽 정렬,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
@@ -182,7 +181,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                               ),
                             if (isSignupScreen)
                               SizedBox(
-                                height: 8,
+                                height: 6,
                               ),
                             TextFormField(
                               decoration: InputDecoration(
@@ -205,7 +204,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: 8,
+                              height: 6,
                             ),
                             TextFormField(
                               decoration: InputDecoration(

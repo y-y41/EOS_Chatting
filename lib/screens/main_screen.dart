@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../config/palette.dart';
 
@@ -10,7 +9,13 @@ class LoginSignUpScreen extends StatefulWidget {
 }
 
 class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
-  bool isSignupScreen = true;
+  late bool isSignupScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    isSignupScreen = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                                 color: Colors.white),
                             children: [
                               TextSpan(
-                                  text: 'to EOS chat',
+                                  text: isSignupScreen ? 'to EOS chat' : 'back',
                                   style: TextStyle(
                                       letterSpacing: 1.0,
                                       fontSize: 25,
@@ -56,7 +61,9 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                         height: 5.0,
                       ),
                       Text(
-                        'Signup to continue',
+                        isSignupScreen
+                            ? 'Signup to continue'
+                            : 'Signin to continue',
                         style:
                             TextStyle(letterSpacing: 1.0, color: Colors.white),
                       )
@@ -65,10 +72,11 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                 ),
               ),
             ),
-            Positioned(
-              top: 150,
-              child: Container(
-                height: 280.0,
+            AnimatedPositioned(
+              top: 180,
+              duration: const Duration(milliseconds: 500),
+              child: AnimatedContainer(
+                height: isSignupScreen ? 280.0 : 250.0,
                 padding: EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width - 40,
                 margin: EdgeInsets.only(left: 20, right: 20),
@@ -81,12 +89,19 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                           blurRadius: 15,
                           spreadRadius: 5)
                     ]),
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeIn,
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isSignupScreen = false;
+                            });
+                          },
                           child: Column(
                             children: [
                               Text(
@@ -109,6 +124,11 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isSignupScreen = true;
+                            });
+                          },
                           child: Column(
                             children: [
                               Text(
@@ -133,15 +153,45 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                       ],
                     ),
                     Container(
+                      margin: EdgeInsets.only(top: 20),
                       child: Form(
                         child: Column(
                           children: [
+                            //Expanded(child: ListView()),
+                            if (isSignupScreen)
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.account_circle,
+                                    color: Palette.iconColor,
+                                  ),
+                                  hintText: 'User name',
+                                  hintStyle:
+                                      TextStyle(color: Palette.iconColor),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(35))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(35))),
+                                ),
+                              ),
+                            if (isSignupScreen)
+                              SizedBox(
+                                height: 8,
+                              ),
                             TextFormField(
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.account_circle,
+                                  Icons.email,
                                   color: Palette.iconColor,
                                 ),
+                                hintText: 'email',
+                                hintStyle: TextStyle(color: Palette.iconColor),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Palette.textColor1),
@@ -153,13 +203,96 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(35))),
                               ),
-                            )
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Palette.iconColor,
+                                ),
+                                hintText: 'password',
+                                hintStyle: TextStyle(color: Palette.iconColor),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Palette.textColor1),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(35))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Palette.textColor1),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(35))),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     )
                   ],
                 ),
+              ),
+            ),
+            AnimatedPositioned(
+              top: isSignupScreen ? 420 : 390,
+              right: 0,
+              left: 0,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  height: 90,
+                  width: 90,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.lightGreen, Colors.green],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: Offset(0, 1))
+                        ]),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height - 125,
+              right: 0,
+              left: 0,
+              child: Column(
+                children: [
+                  Text(!isSignupScreen ? 'or Signin with' : 'or Signup with'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextButton.icon(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        minimumSize: Size(155, 40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Palette.googleColor),
+                    icon: Icon(Icons.add),
+                    label: Text('Google'),
+                  )
+                ],
               ),
             )
           ],

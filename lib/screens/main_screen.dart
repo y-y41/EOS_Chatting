@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eos_chatting/screens/chat_screens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../config/palette.dart';
 
@@ -9,7 +12,13 @@ class LoginSignUpScreen extends StatefulWidget {
 }
 
 class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
-  late bool isSignupScreen;
+  final _authentication = FirebaseAuth.instance;
+
+  bool isSignupScreen = true;
+
+  String userName = '';
+  String userEmail = '';
+  String userPassword = '';
 
   @override
   void initState() {
@@ -159,6 +168,12 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                             //Expanded(child: ListView()),
                             if (isSignupScreen)
                               TextFormField(
+                                onSaved: (value) {
+                                  userName = value!;
+                                },
+                                onChanged: (value) {
+                                  userName = value;
+                                },
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.account_circle,
@@ -184,6 +199,13 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                                 height: 6,
                               ),
                             TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              onSaved: (value) {
+                                userEmail = value!;
+                              },
+                              onChanged: (value) {
+                                userEmail = value;
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
                                   Icons.email,
@@ -207,6 +229,13 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                               height: 6,
                             ),
                             TextFormField(
+                              obscureText: true,
+                              onSaved: (value) {
+                                userPassword = value!;
+                              },
+                              onChanged: (value) {
+                                userPassword = value;
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
                                   Icons.lock,
@@ -248,23 +277,62 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(50)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.lightGreen, Colors.green],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              spreadRadius: 1,
-                              blurRadius: 1,
-                              offset: Offset(0, 1))
-                        ]),
-                    child: Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
+                  child: GestureDetector(
+                    onTap: () async {
+                      if (isSignupScreen) {
+                        try {
+                          final newUser = await _authentication
+                              .createUserWithEmailAndPassword(
+                                  email: userEmail, password: userPassword);
+
+                          await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(newUser.user!.uid)
+                              .set({'userName': userName, 'email': userEmail});
+                          if (newUser.user != null) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ChatScreen();
+                            }));
+                          }
+                        } catch (e) {
+                          print(e);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Please check your email and password'),
+                            backgroundColor: Colors.blue,
+                          ));
+                        }
+                      }
+                      if (!isSignupScreen) {
+                        try {
+                          final newUser =
+                              await _authentication.signInWithEmailAndPassword(
+                                  email: userEmail, password: userPassword);
+                          if (newUser.user != null) {}
+                        } catch (e) {
+                          print(e);
+                        }
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Colors.lightGreen, Colors.green],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: Offset(0, 1))
+                          ]),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
